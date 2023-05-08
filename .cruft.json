@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/dagleaves/python-package-template",
-  "commit": "9257ea71445b1ed81a9a32103416e75ebbf31eef",
+  "commit": "09a3c99f77afb07b8d6e8b26c1aa5d47c06ca4ea",
   "checkout": null,
   "context": {
     "cookiecutter": {
