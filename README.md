@@ -28,7 +28,7 @@ pip install languageassistant
 * Clone this repository
 * Requirements:
   * [Poetry](https://python-poetry.org/)
-  * Python 3.7+
+  * Python 3.8+
 * Create a virtual environment and install the dependencies
 
 ```sh
@@ -50,7 +50,7 @@ pytest
 ### Documentation
 
 The documentation is automatically generated from the content of the [docs directory](./docs) and from the docstrings
- of the public signatures of the source code. The documentation is updated and published as a [Github project page
+ of the public signatures of the source code. The documentation is updated and published as a [GitHub project page
  ](https://pages.github.com/) automatically as part each release.
 
 ### Releasing
@@ -66,7 +66,7 @@ Find the draft release from the
 ### Pre-commit
 
 Pre-commit hooks run all the auto-formatters (e.g. `black`, `isort`), linters (e.g. `mypy`, `flake8`), and other quality
- checks to make sure the changeset is in good shape before a commit/push happens.
+ checks to make sure the changes are good before a commit/push happens.
 
 You can install the hooks with (runs for each commit):
 
@@ -87,5 +87,3 @@ pre-commit run --all-files
 ```
 
 ---
-
-This project was generated using the [wolt-python-package-cookiecutter](https://github.com/woltapp/wolt-python-package-cookiecutter) template.
