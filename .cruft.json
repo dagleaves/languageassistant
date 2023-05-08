@@ -1,5 +1,5 @@
 {
-  "template": "https://github.com/woltapp/wolt-python-package-cookiecutter",
+  "template": "https://github.com/dagleaves/python-package-template",
   "commit": "4eecc9c4d27e3c9321438bc1fdaf717bec5eadf6",
   "checkout": null,
   "context": {
@@ -11,7 +11,7 @@
       "project_slug": "languageassistant",
       "package_name": "languageassistant",
       "project_short_description": "An LLM-powered language learning assistant",
-      "_template": "https://github.com/woltapp/wolt-python-package-cookiecutter"
+      "_template": "https://github.com/dagleaves/python-package-template"
     }
   },
   "directory": null
