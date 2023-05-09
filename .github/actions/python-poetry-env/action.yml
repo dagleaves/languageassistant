@@ -12,7 +12,7 @@ runs:
   steps:
     - uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: portaudio19-dev python-pyaudio
+        packages: portaudio19-dev
         version: 1.0
     - uses: actions/setup-python@v4
       with:
