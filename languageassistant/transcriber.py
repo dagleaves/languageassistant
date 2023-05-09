@@ -74,6 +74,8 @@ class Transcriber:
         if not mic_name or mic_name == "list":
             print("Available microphone devices are: ")
             microphones = sr.Microphone.list_microphone_names()
+            if not microphones:
+                raise Exception("No microphones available")
             for index, name in enumerate(microphones):
                 print(str(index + 1) + ". Microphone:", name)
             mic_idx = input(f"Select microphone number (1-{len(microphones)}): ")
