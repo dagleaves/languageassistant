@@ -10,6 +10,10 @@ outputs: {}
 runs:
   using: 'composite'
   steps:
+    - uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: libportaudio-dev
+        version: 1.0
     - uses: actions/setup-python@v4
       with:
         python-version: ${{inputs.python-version}}
