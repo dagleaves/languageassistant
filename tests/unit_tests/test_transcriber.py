@@ -6,12 +6,7 @@ import pytest
 import speech_recognition as sr
 from pytest import MonkeyPatch
 
-from languageassistant.transcriber import Transcriber, get_transcription, load_openai
-
-
-def test_openai_apikey() -> None:
-    load_openai()
-    assert openai.api_key != ""
+from languageassistant.transcriber import Transcriber, get_transcription
 
 
 def test_transcriber_initialization(monkeypatch: MonkeyPatch) -> None:
