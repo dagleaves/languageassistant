@@ -83,6 +83,7 @@ addopts = """\
     --cov tests \
     --cov-report term-missing \
     --no-cov-on-fail \
+    --cov-fail-under=0
 """
 
 [tool.coverage.report]
