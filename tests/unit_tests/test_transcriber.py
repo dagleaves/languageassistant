@@ -9,10 +9,9 @@ from pytest import MonkeyPatch
 from languageassistant.transcriber import Transcriber, get_transcription
 
 microphones = sr.Microphone.list_microphone_names()
-has_microphone = len(microphones) > 0
 
 
-@pytest.mark.skipif(not has_microphone, reason="No microphone available")
+@pytest.mark.skipif(not microphones, reason="No microphone available")
 def test_transcriber_initialization(monkeypatch: MonkeyPatch) -> None:
     print(type(monkeypatch))
     monkeypatch.setattr("builtins.input", lambda _: 1)
