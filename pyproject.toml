@@ -36,6 +36,10 @@ toml = "^0.10.2"
 speechrecognition = "^3.10.0"
 pyaudio = "^0.2.13"
 poetry-dotenv-plugin = "^0.1.0"
+faiss-cpu = "^1.7.4"
+lark = "^1.1.5"
+tiktoken = "^0.4.0"
+questionary = "^1.10.0"
 
 [tool.poetry.dev-dependencies]
 autoflake = "*"
