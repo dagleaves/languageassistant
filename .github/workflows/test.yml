@@ -39,6 +39,8 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
+    env:
+      OPENAI_API_KEY: api_key
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/python-poetry-env
