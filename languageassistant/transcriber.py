@@ -1,5 +1,5 @@
+"""Modified version of https://github.com/jakvb/whisper_real_time"""
 import io
-import os
 from datetime import datetime, timedelta
 from queue import Queue
 from tempfile import NamedTemporaryFile
@@ -9,9 +9,7 @@ from typing import Any, Optional
 import openai
 import speech_recognition as sr
 
-
-def load_openai() -> None:
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+from languageassistant.utils import load_openai_api_key
 
 
 def get_transcription(temp_file: str, wav_data: io.BytesIO) -> str:
@@ -29,7 +27,7 @@ class Transcriber:
     """Transcription model for user input."""
 
     def __init__(self, default_microphone: str = "list") -> None:
-        load_openai()
+        load_openai_api_key()
         # Microphone Settings
         self.record_timeout: float = 2
         """How real-time the recording is."""
