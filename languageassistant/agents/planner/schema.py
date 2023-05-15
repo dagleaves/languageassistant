@@ -10,11 +10,20 @@ class Topic(BaseModel):
 
     value: str
 
+    def __str__(self) -> str:
+        return self.value
+
 
 class Lesson(BaseModel):
     """A list of conversation topics for a lesson plan."""
 
     topics: List[Topic]
+
+    def __str__(self) -> str:
+        lesson = ""
+        for i, topic in enumerate(self.topics):
+            lesson += f"{i + 1}. {topic}\n"
+        return lesson
 
 
 class LessonOutputParser(BaseOutputParser):
