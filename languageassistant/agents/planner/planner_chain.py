@@ -33,7 +33,7 @@ class LessonPlanningOutputParser(LessonOutputParser):
 
 
 def load_lesson_planner(
-    llm: BaseLanguageModel, system_prompt: str = SYSTEM_PROMPT
+    llm: BaseLanguageModel, system_prompt: str = SYSTEM_PROMPT, verbose: bool = False
 ) -> LessonPlanner:
     prompt_template = ChatPromptTemplate.from_messages(
         [
@@ -41,7 +41,7 @@ def load_lesson_planner(
             HumanMessagePromptTemplate.from_template(HUMAN_TEMPLATE),
         ]
     )
-    llm_chain = LLMChain(llm=llm, prompt=prompt_template)
+    llm_chain = LLMChain(llm=llm, prompt=prompt_template, verbose=verbose)
     return LessonPlanner(
         llm_chain=llm_chain,
         output_parser=LessonPlanningOutputParser(),
