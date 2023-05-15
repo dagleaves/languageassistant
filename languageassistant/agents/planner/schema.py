@@ -10,7 +10,7 @@ class Topic(BaseModel):
 
     value: str
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return self.value
 
 
@@ -19,7 +19,7 @@ class Lesson(BaseModel):
 
     topics: List[Topic]
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         lesson = "Lesson:\n"
         for i, topic in enumerate(self.topics):
             lesson += f"{i + 1}. {topic}\n"
