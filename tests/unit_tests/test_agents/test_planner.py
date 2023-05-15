@@ -8,10 +8,10 @@ def test_schema_topic_repr() -> None:
 
 def test_schema_empty_lesson_repr() -> None:
     test_lesson = Lesson(topics=[])
-    assert str(test_lesson) == "Lesson:\n"
+    assert str(test_lesson) == ""
 
 
 def test_schema_lesson_repr() -> None:
     test_topic = Topic(value="test")
     test_lesson = Lesson(topics=[test_topic])
-    assert str(test_lesson) == "Lesson:\n1. test\n"
+    assert str(test_lesson) == "1. test\n"

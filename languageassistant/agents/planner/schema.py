@@ -20,7 +20,7 @@ class Lesson(BaseModel):
     topics: List[Topic]
 
     def __str__(self) -> str:
-        lesson = "Lesson:\n"
+        lesson = ""
         for i, topic in enumerate(self.topics):
             lesson += f"{i + 1}. {topic}\n"
         return lesson
