@@ -1,5 +1,6 @@
 from langchain.base_language import BaseLanguageModel
 from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -19,7 +20,7 @@ SYSTEM_TEMPLATE = (
 )
 
 HUMAN_TEMPLATE = (
-    "Conversation topic: {topic}\n\n" "{history}" "Human: {human_input}" "Assistant:"
+    "Conversation topic: {topic}\n\n{history}\nHuman: {human_input}\nAssistant:"
 )
 
 
@@ -27,6 +28,7 @@ def load_conversation_agent(
     llm: BaseLanguageModel,
     system_template: str = SYSTEM_TEMPLATE,
     human_template: str = HUMAN_TEMPLATE,
+    verbose: bool = False,
 ) -> ConversationAgent:
     prompt_template = ChatPromptTemplate.from_messages(
         [
@@ -34,7 +36,10 @@ def load_conversation_agent(
             HumanMessagePromptTemplate.from_template(human_template),
         ]
     )
-    llm_chain = LLMChain(llm=llm, prompt=prompt_template)
+    memory = ConversationBufferMemory(ai_prefix="Assistant")
+    llm_chain = LLMChain(
+        llm=llm, prompt=prompt_template, memory=memory, verbose=verbose
+    )
     return ConversationAgent(
         llm_chain=llm_chain,
     )
