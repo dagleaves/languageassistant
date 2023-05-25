@@ -3,11 +3,17 @@ import os
 import pytest
 from langchain.chat_models import ChatOpenAI
 
-from languageassistant.agents.planner import load_lesson_planner
-from languageassistant.agents.planner.schema import Lesson
+from languageassistant.agents.conversation import load_conversation_agent
 from languageassistant.utils import load_openai_api_key
 
 invalid_openai_api_key = os.getenv("OPENAI_API_KEY") in [None, "", "api_key"]
+
+
+test_inputs = {
+    "language": "English",
+    "proficiency": "Beginner",
+    "topic": "Greetings and Introductions",
+}
 
 
 @pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
@@ -15,29 +21,23 @@ def setup_module() -> None:
     load_openai_api_key()
 
 
-def test_schema_empty_lesson_repr() -> None:
-    test_lesson = Lesson(topics=[])
-    assert str(test_lesson) == ""
-
-
 @pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
-def test_schema_lesson_repr() -> None:
-    test_lesson = Lesson(topics=["test"])
-    assert str(test_lesson) == "1. test\n"
-
-
-@pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
-def test_initialize_planner() -> None:
+def test_initialize_conversation_agent() -> None:
     llm = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
-    load_lesson_planner(llm)
+    load_conversation_agent(llm)
 
 
 @pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
-def test_planner_result() -> None:
+def test_conversation_greet() -> None:
     llm = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
-    agent = load_lesson_planner(llm)
-    inputs = {
-        "language": "Chinese",
-        "proficiency": "Beginner",
-    }
-    agent.plan(inputs)
+    agent = load_conversation_agent(llm)
+    agent.greet(test_inputs)
+
+
+@pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
+def test_conversation_speak() -> None:
+    llm = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
+    agent = load_conversation_agent(llm)
+    full_input = test_inputs.copy()
+    full_input["human_input"] = "Hello"
+    agent.speak(test_inputs)

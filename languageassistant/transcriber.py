@@ -94,7 +94,7 @@ class Transcriber:
         data = audio.get_raw_data()
         self.data_queue.put(data)
 
-    def run(self) -> Optional[str]:
+    def run(self) -> str:
         # assert self.source is not None, 'Invalid microphone source'
         now = datetime.utcnow()
         # Pull raw recorded audio from the queue.
@@ -129,7 +129,7 @@ class Transcriber:
                 return self.transcription
             print("\r" + self.transcription, end="")
             return self.run()
-        return None
+        return ""
 
 
 def main() -> None:
