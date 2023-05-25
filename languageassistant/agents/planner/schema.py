@@ -5,19 +5,10 @@ from langchain.schema import BaseOutputParser
 from pydantic import BaseModel
 
 
-class Topic(BaseModel):
-    """Conversation topic."""
-
-    value: str
-
-    def __str__(self) -> str:
-        return self.value
-
-
 class Lesson(BaseModel):
     """A list of conversation topics for a lesson plan."""
 
-    topics: List[Topic]
+    topics: List[str]
 
     def __str__(self) -> str:
         lesson = ""

@@ -49,7 +49,7 @@ def test_transcriber_run_empty(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr("builtins.input", lambda _: 1)
     transcriber = Transcriber()
     transcription = transcriber.run()
-    assert transcription is None
+    assert transcription == ""
 
 
 @pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
