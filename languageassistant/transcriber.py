@@ -12,6 +12,10 @@ import speech_recognition as sr
 from languageassistant.utils import load_openai_api_key
 
 
+class MicrophoneNotFoundError(Exception):
+    """No microphone found."""
+
+
 def get_transcription(temp_file: str, wav_data: io.BytesIO) -> str:
     # Write wav data to the temporary file as bytes.
     with open(temp_file, "w+b") as wf:
@@ -73,7 +77,7 @@ class Transcriber:
             print("Available microphone devices are: ")
             microphones = sr.Microphone.list_microphone_names()
             if not microphones:
-                raise Exception("No microphones available")
+                raise MicrophoneNotFoundError
             for index, name in enumerate(microphones):
                 print(str(index + 1) + ". Microphone:", name)
             mic_idx = input(f"Select microphone number (1-{len(microphones)}): ")
