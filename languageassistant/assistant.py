@@ -1,5 +1,5 @@
 import time
-from typing import Any, Dict
+from typing import Dict
 
 import questionary
 from langchain.base_language import BaseLanguageModel
@@ -11,6 +11,8 @@ from languageassistant.agents.conversation.base import BaseConversationAgent
 from languageassistant.agents.planner import load_lesson_planner
 from languageassistant.agents.planner.base import BasePlanner
 from languageassistant.agents.planner.schema import Lesson
+from languageassistant.transcriber import Transcriber
+from languageassistant.tts import TTS
 
 
 class Assistant(BaseModel):
@@ -21,7 +23,12 @@ class Assistant(BaseModel):
     llm: BaseLanguageModel = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
     lesson_agent: BasePlanner = load_lesson_planner(llm)
     conversation_agent: BaseConversationAgent = load_conversation_agent(llm)
-    transcriber: Any
+    transcriber: Transcriber
+    tts: TTS
+    use_tts: bool = True
+
+    class Config:
+        arbitrary_types_allowed = True
 
     @property
     def background(self) -> Dict[str, str]:
@@ -62,6 +69,8 @@ class Assistant(BaseModel):
             print("Retrieving topic background teaching...")
             topic_prereqs = self.greet(topic)
             print(topic_prereqs)
+            if self.use_tts:
+                self.tts.run(topic_prereqs)
 
             # TODO: Allow user to ask any questions -> enter QA subrouttine then return here when good
             # Maybe need QA Agent?
@@ -79,6 +88,8 @@ class Assistant(BaseModel):
                     if "<END_CONVERSATION>" in ai_response:
                         raise KeyboardInterrupt
                     print("\rAssistant:", ai_response)
+                    if self.use_tts:
+                        self.tts.run(ai_response)
             except KeyboardInterrupt:
                 continue_conversation = questionary.select(
                     "Conversation ended. Continue to next topic?",
