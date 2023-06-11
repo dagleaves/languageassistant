@@ -3,7 +3,6 @@ import io
 from datetime import datetime, timedelta
 from queue import Queue
 from tempfile import NamedTemporaryFile
-from time import sleep
 from typing import Any, Optional
 
 import openai
@@ -53,8 +52,6 @@ class Transcriber:
         """SpeechRecognizer to record and detect when speech ends."""
         self.temp_file: str = NamedTemporaryFile(suffix=".wav").name
         """File for sending to OpenAI Whisper API."""
-        self.transcription: str = ""
-        """Current transcription."""
 
         # Recording settings
         self.recorder.energy_threshold = self.energy_threshold
@@ -103,14 +100,13 @@ class Transcriber:
         now = datetime.utcnow()
         # Pull raw recorded audio from the queue.
         if not self.data_queue.empty():
-            phrase_complete = False
+            pass
             # If enough time has passed between recordings, consider the phrase complete.
             # Clear the current working audio buffer to start over with the new data.
             if self.phrase_time and now - self.phrase_time > timedelta(
                 seconds=self.phrase_timeout
             ):
                 self.last_sample = b""
-                phrase_complete = True
             # This is the last time we received new audio data from the queue.
             self.phrase_time = now
 
@@ -128,25 +124,5 @@ class Transcriber:
 
             # If we detected a pause between recordings, add a new item to our transcription.
             # Otherwise edit the existing one.
-            self.transcription = text
-            if phrase_complete:
-                return self.transcription
-            print("\r" + self.transcription, end="")
-            return self.run()
+            return text
         return ""
-
-
-def main() -> None:
-    transcriber = Transcriber(default_microphone="Microphone (2- Blue Snowball )")
-    while True:
-        try:
-            transcription = transcriber.run()
-            if transcription:
-                print("\r" + transcription)
-            sleep(0.25)
-        except KeyboardInterrupt:
-            break
-
-
-if __name__ == "__main__":
-    main()
