@@ -24,15 +24,7 @@ class BaseConversationAgent(BaseModel):
         """Start a new conversation about a topic."""
 
     @abstractmethod
-    async def agreet(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
-        """Start a new converstion about a topic."""
-
-    @abstractmethod
     def speak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
-        """Single atomic reply to last human message."""
-
-    @abstractmethod
-    async def aspeak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
         """Single atomic reply to last human message."""
 
 
@@ -48,14 +40,6 @@ class ConversationAgent(BaseConversationAgent):
         response = self.speak(inputs)
         return response
 
-    async def agreet(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
-        """Start a new converstion about a topic."""
-        validate_inputs(inputs)
-        if "human_input" not in inputs:
-            inputs["human_input"] = GREETING
-        response = await self.aspeak(inputs)
-        return response
-
     def speak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
         """Given input, create reply.
         inputs: dict {
@@ -69,21 +53,4 @@ class ConversationAgent(BaseConversationAgent):
             "human_input" in inputs
         ), "Must provide human input for conversation chain"
         llm_response = self.llm_chain.run(**inputs, stop=self.stop, callbacks=callbacks)
-        return llm_response
-
-    async def aspeak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
-        """Given input, create reply.
-        inputs: dict {
-            langauge: target language (optional),
-            proficiency: user proficiency with target language (optional)
-            topic: the topic to discuss (optional),
-            input: the current user input in the conversation
-        """
-        validate_inputs(inputs)
-        assert (
-            "human_input" in inputs
-        ), "Must provide human input for conversation chain"
-        llm_response = await self.llm_chain.arun(
-            **inputs, stop=self.stop, callbacks=callbacks
-        )
         return llm_response

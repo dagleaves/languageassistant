@@ -13,12 +13,6 @@ class BasePlanner(BaseModel):
     def plan(self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any) -> Lesson:
         """Given input, decided what to do."""
 
-    @abstractmethod
-    async def aplan(
-        self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any
-    ) -> Lesson:
-        """Given input, decided what to do."""
-
 
 class LessonPlanner(BasePlanner):
     llm_chain: LLMChain
@@ -28,13 +22,4 @@ class LessonPlanner(BasePlanner):
     def plan(self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any) -> Lesson:
         """Given input, decided what to do."""
         llm_response = self.llm_chain.run(**inputs, stop=self.stop, callbacks=callbacks)
-        return self.output_parser.parse(llm_response)
-
-    async def aplan(
-        self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any
-    ) -> Lesson:
-        """Given input, decided what to do."""
-        llm_response = await self.llm_chain.arun(
-            **inputs, stop=self.stop, callbacks=callbacks
-        )
         return self.output_parser.parse(llm_response)
