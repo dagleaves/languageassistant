@@ -8,7 +8,7 @@ from languageassistant.assistant import Assistant
 from languageassistant.transcriber import Transcriber
 from languageassistant.tts import TTS
 
-no_google_api_key = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") in [None, "", "api_key"]
+no_google_api_key = os.getenv("GOOGLE_API_KEY") in [None, "", "api_key"]
 microphones = sr.Microphone.list_microphone_names()
 invalid_openai_api_key = os.getenv("OPENAI_API_KEY") in [None, "", "api_key"]
 

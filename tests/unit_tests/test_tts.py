@@ -4,7 +4,7 @@ import pytest
 
 from languageassistant.tts import TTS
 
-no_google_api_key = os.getenv("GOOGLE_APPLICATION_CREDENTIALS") in [None, "", "api_key"]
+no_google_api_key = os.getenv("GOOGLE_API_KEY") in [None, "", "api_key"]
 
 
 @pytest.mark.skipif(
