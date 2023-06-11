@@ -19,6 +19,7 @@ the [Poetry dotenv plugin](https://pypi.org/project/poetry-dotenv-plugin/)
 to use a local .env file.
 
 Necessary environment variables:
+
 1. `OPENAI_API_KEY`: OpenAI's API key to use for Whisper audio transcription
 2. `GOOGLE_API_KEY`: Google's Text-to-Speech API key
 
@@ -48,8 +49,8 @@ key as its value
 
 ## Run the assistant
 
-Download the demo from https://github.com/dagleaves/languageassistant/blob/main/main.py
-
+Download the demo from the [GitHub repository](https://github.com/dagleaves/languageassistant/blob/main/main.py
+).
 ```shell
 python main.py
 ```
