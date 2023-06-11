@@ -1,5 +1,5 @@
 import time
-from typing import Dict
+from typing import Dict, List, Optional
 
 import questionary
 from langchain.base_language import BaseLanguageModel
@@ -51,12 +51,54 @@ class Assistant(BaseModel):
         inputs["human_input"] = human_input
         return self.conversation_agent.speak(inputs)
 
-    def run(self) -> None:
-        # Get lesson plan
-        self.plan_lesson()
+    def converse(self, topic: str) -> None:
+        """Converse with conversation agent about a topic"""
+        try:
+            while True:
+                print("Microphone recording...", end="")
+                user_input = self.transcriber.run()
+                if user_input == "":
+                    print("\r", end="")
+                    time.sleep(0.25)
+                    continue
+                r_padding = " " * max(
+                    23 - 7 - len(user_input), 0
+                )  # fully cover "Microphone recording..."
+                print("\rHuman:", user_input, r_padding)
+                print("Retrieving response...", end="")
+                ai_response = self.speak(topic, user_input)
+                if "<END_CONVERSATION>" in ai_response:
+                    return
+                print("\rAssistant:", ai_response)
+                if self.use_tts:
+                    self.tts.run(ai_response)
+        except KeyboardInterrupt:
+            return
 
-        # Display suggested topics
-        print("Suggested list of conversation topics:")
+    def _output_topic_background(self, topic: str) -> None:
+        """Output topic background teaching"""
+        print("Retrieving topic background teaching...")
+        topic_prereqs = self.greet(topic)
+        print(topic_prereqs)
+        if self.use_tts:
+            self.tts.run(topic_prereqs)
+
+    def run(
+        self, include_topic_background: bool, lesson: Optional[List[str]] = None
+    ) -> None:
+        """Full assistant discussion loop
+        @param include_topic_background: if assistant should explain topic before conversing
+        @param lesson: custom list of topics for lesson
+        @return None
+        """
+        # Get lesson plan if not provided
+        if lesson is None:
+            self.plan_lesson()
+        else:
+            self.lesson = Lesson(topics=lesson)
+
+        # Display topics
+        print("List of conversation topics:")
         print(self.lesson)
 
         # TODO: Allow user to provide feedback to adjust topics (too easy, too hard, done before)
@@ -66,38 +108,19 @@ class Assistant(BaseModel):
         for topic in self.lesson.topics:
             print("Starting new conversation. Press CTRL + C to end conversation")
             print("Topic:", topic)
-            print("Retrieving topic background teaching...")
-            topic_prereqs = self.greet(topic)
-            print(topic_prereqs)
-            if self.use_tts:
-                self.tts.run(topic_prereqs)
+            if include_topic_background:
+                self._output_topic_background(topic)
+            self.converse(topic)
 
-            # TODO: Allow user to ask any questions -> enter QA subrouttine then return here when good
-            # Maybe need QA Agent?
-
-            try:
-                while True:
-                    print("Microphone recording...", end="")
-                    user_input = self.transcriber.run()
-                    if user_input == "":
-                        time.sleep(0.25)
-                        continue
-                    print("\rHuman:", user_input)
-                    print("Retrieving response...", end="")
-                    ai_response = self.speak(topic, user_input)
-                    if "<END_CONVERSATION>" in ai_response:
-                        raise KeyboardInterrupt
-                    print("\rAssistant:", ai_response)
-                    if self.use_tts:
-                        self.tts.run(ai_response)
-            except KeyboardInterrupt:
-                continue_conversation = questionary.select(
-                    "Conversation ended. Continue to next topic?",
-                    choices=[
-                        "Yes",
-                        "No",
-                    ],
-                ).ask()
-                if continue_conversation == "No":
-                    return
-                continue
+            # Continue to next topic or return
+            if topic == self.lesson.topics[-1]:  # No more topics -> return
+                return
+            continue_conversations = questionary.select(
+                "Conversation ended. Continue to next topic?",
+                choices=[
+                    "Yes",
+                    "No",
+                ],
+            ).ask()
+            if continue_conversations == "No":
+                return
