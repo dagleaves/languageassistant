@@ -15,6 +15,7 @@ theme:
 
 nav:
   - Introduction: 'index.md'
+  - user_guide.md
   - api_docs.md
   - changelog.md
 
