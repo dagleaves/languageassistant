@@ -1,4 +1,5 @@
 import io
+import os
 from typing import Any, Optional
 
 from google.cloud import texttospeech
@@ -34,7 +35,9 @@ class TTS(BaseModel):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         if "client" not in kwargs:
-            self.client = texttospeech.TextToSpeechClient()
+            self.client = texttospeech.TextToSpeechClient(
+                client_options={"api_key": os.getenv("GOOGLE_API_KEY")}
+            )
         if "audio_config" not in kwargs:
             self.audio_config = texttospeech.AudioConfig(
                 {"audio_encoding": texttospeech.AudioEncoding.MP3}
