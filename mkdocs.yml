@@ -22,15 +22,16 @@ markdown_extensions:
   - pymdownx.snippets:
       check_paths: true
 
+watch:
+  - languageassistant
+
 plugins:
   - search:
   - mkdocstrings:
       default_handler: python
       handlers:
         python:
-          rendering:
+          options:
             show_signature_annotations: true
             show_source: true
             show_submodules: true
-      watch:
-        - languageassistant
