@@ -2,22 +2,20 @@ site_name: "LanguageAssistant"
 repo_url: https://github.com/dagleaves/languageassistant
 
 theme:
-  name: material
-  palette:
-    - scheme: default
-      toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to dark mode
-    - scheme: slate
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
+  name: readthedocs
 
 nav:
-  - Introduction: 'index.md'
-  - user_guide.md
-  - api_docs.md
-  - changelog.md
+  - 'Getting Started':
+      - Introduction: 'index.md'
+      - user_guide.md
+  - 'Modules':
+      - 'Agents':
+          - modules/agents/conversation.md
+          - modules/agents/planner.md
+      - modules/transcriber.md
+      - modules/tts.md
+  - 'About':
+      - changelog.md
 
 markdown_extensions:
   - pymdownx.snippets:
@@ -34,5 +32,5 @@ plugins:
         python:
           options:
             show_signature_annotations: true
-            show_source: true
+            show_source: false
             show_submodules: true
