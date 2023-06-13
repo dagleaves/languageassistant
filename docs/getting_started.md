@@ -29,7 +29,7 @@ Necessary environment variables:
 account
 2. Click the `Create new secret key` button
 3. Copy that API key and export the `OPENAI_API_KEY`
- environment variable with the API key as its value
+environment variable with the API key as its value
 
 ### Google Cloud
 
@@ -39,12 +39,10 @@ Setting up Google Cloud takes a bit more work of navigating menus.
 2. Click `Select a project`
 3. Create a new project
 4. Select the newly created project as your active project
-5. Enable the
-[Cloud Text-to-Speech API](https://console.cloud.google.com/marketplace/product/google/texttospeech.googleapis.com)
+5. Enable the [Cloud Text-to-Speech API](https://console.cloud.google.com/marketplace/product/google/texttospeech.googleapis.com)
 6. Return to the console and click `Credentials`
 7. Click `Create Credentials` -> `API Key`
-8. Copy and export the `GOOGLE_API_KEY` environment variable with the API
-key as its value
+8. Copy and export the `GOOGLE_API_KEY` environment variable with the API key as its value
 
 
 ## Run the assistant
