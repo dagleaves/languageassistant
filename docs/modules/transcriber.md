@@ -1,3 +1,0 @@
-# Transcription
-
-:::languageassistant.transcriber
