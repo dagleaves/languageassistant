@@ -1,5 +1,6 @@
 """Modified version of https://github.com/jakvb/whisper_real_time"""
 import io
+from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 from queue import Queue
 from tempfile import NamedTemporaryFile
@@ -26,8 +27,16 @@ def get_transcription(temp_file: str, wav_data: io.BytesIO) -> str:
     return text
 
 
+class BaseTranscriber(ABC):
+    """Abstract base transcription class"""
+
+    @abstractmethod
+    def run(self) -> str:
+        """Record a single phrase of microphone input"""
+
+
 class Transcriber:
-    """Transcription model for user input."""
+    """Real-time transcription of user microphone input"""
 
     def __init__(self, default_microphone: str = "list") -> None:
         load_openai_api_key()
@@ -96,7 +105,7 @@ class Transcriber:
         self.data_queue.put(data)
 
     def run(self) -> str:
-        # assert self.source is not None, 'Invalid microphone source'
+        """Record a single phrase of microphone input"""
         now = datetime.utcnow()
         # Pull raw recorded audio from the queue.
         if not self.data_queue.empty():
