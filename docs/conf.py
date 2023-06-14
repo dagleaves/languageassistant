@@ -6,6 +6,7 @@
 
 import toml
 
+# Access pyproject versioning
 with open("../pyproject.toml") as f:
     data = toml.load(f)
 
@@ -29,13 +30,12 @@ extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
-    "sphinx.ext.autosummary",
+    "docs._ext.pydantic_autosummary",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxcontrib.autodoc_pydantic",
     # "myst_nb",
     "sphinx_copybutton",
-    # "sphinx_panels",
     "IPython.sphinxext.ipython_console_highlighting",
 ]
 source_suffix = [".ipynb", ".html", ".md", ".rst"]
@@ -51,12 +51,12 @@ add_module_names = False  # Remove namespaces from class/method signatures
 # Autodoc Pydantic
 autodoc_pydantic_model_show_json = False
 autodoc_pydantic_field_list_validators = False
-autodoc_pydantic_config_members = False
-autodoc_pydantic_model_show_config_summary = False
+# autodoc_pydantic_config_members = False
+# autodoc_pydantic_model_show_config_summary = False
 autodoc_pydantic_model_show_validator_members = False
-autodoc_pydantic_model_show_field_summary = False
-autodoc_pydantic_model_members = False
-autodoc_pydantic_model_undoc_members = False
+# autodoc_pydantic_model_show_field_summary = False
+# autodoc_pydantic_model_members = False
+# autodoc_pydantic_model_undoc_members = False
 # autodoc_typehints = "signature"
 # autodoc_typehints = "description"
 
@@ -70,7 +70,7 @@ simplify_optional_unions = False
 typehints_formatter = None
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "_ext"]
 
 
 # -- Options for HTML output -------------------------------------------------

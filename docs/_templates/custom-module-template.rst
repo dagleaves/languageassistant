@@ -14,12 +14,27 @@
     {% endif %}
     {% endblock %}
 
+    {% block pydantic_models %}
+    {% if pydantic_models %}
+    .. rubric:: {{ _('Models') }}
+
+    .. autosummary::
+       :toctree:
+       :template: custom-model-template.rst
+       :nosignatures:
+    {% for item in pydantic_models %}
+       {{ item }}
+    {%- endfor %}
+    {% endif %}
+    {% endblock %}
+
     {% block functions %}
     {% if functions %}
     .. rubric:: {{ _('Functions') }}
 
     .. autosummary::
         :toctree:
+        :template: custom-function-template.rst
         :nosignatures:
     {% for item in functions %}
         {{ item }}
