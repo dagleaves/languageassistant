@@ -1,5 +1,7 @@
+"""Text to speech"""
 import io
 import os
+from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from google.cloud import texttospeech
@@ -10,21 +12,33 @@ from pydub.playback import play
 from languageassistant.utils import country_codes
 
 
-class TTS(BaseModel):
-    """Convert text to speech for different languages using Google's TTS API"""
+class BaseTTS(BaseModel, ABC):
+    """Abstract base tts model"""
 
     language: str
+    """TTS input language name [see Supported Languages]"""
+
+    @abstractmethod
+    def run(self, tts_input: str) -> None:
+        """Converts tts input in language to audio with playback on speaker"""
+
+
+class TTS(BaseTTS):
+    """Multilingual TTS using the Google TTS API"""
 
     client: Optional[texttospeech.TextToSpeechClient] = None
+    """Google TTS client"""
     voice_gender: int = texttospeech.SsmlVoiceGender.NEUTRAL
+    """TTS voice gender"""
     audio_config: Optional[texttospeech.AudioConfig] = None
+    """Audio config for return encoding type (MP3)"""
 
     class Config:
         arbitrary_types_allowed = True
 
     @property
     def voice(self) -> texttospeech.VoiceSelectionParams:
-        """TTS voice selection"""
+        """Select TTS voice from language and gender"""
         return texttospeech.VoiceSelectionParams(
             {
                 "language_code": country_codes[self.language],
@@ -53,7 +67,7 @@ class TTS(BaseModel):
         return response.audio_content
 
     def run(self, tts_input: str) -> None:
-        """Convert tts and output to speaker"""
+        """Convert tts to audio and output to speaker"""
         mp3_bytes = self._text_to_mp3(tts_input)
         mp3_buffer = io.BytesIO(mp3_bytes)
         audio = AudioSegment.from_file(mp3_buffer, format="mp3")
