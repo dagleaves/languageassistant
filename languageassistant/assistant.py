@@ -1,3 +1,4 @@
+"""Fully integrated language assistant"""
 import time
 from typing import Dict, List, Optional
 
@@ -16,6 +17,8 @@ from languageassistant.tts import TTS
 
 
 class Assistant(BaseModel):
+    """Full language assistant model"""
+
     language: str
     proficiency: str
     lesson: Lesson = Lesson(topics=[])

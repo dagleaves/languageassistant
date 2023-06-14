@@ -43,10 +43,10 @@ class ConversationAgent(BaseConversationAgent):
     def speak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
         """Given input, create reply.
         inputs: dict {
-            langauge: target language (optional),
-            proficiency: user proficiency with target language (optional)
-            topic: the topic to discuss (optional),
-            input: the current user input in the conversation
+        langauge: target language (optional),
+        proficiency: user proficiency with target language (optional)
+        topic: the topic to discuss (optional),
+        input: the current user input in the conversation
         """
         validate_inputs(inputs)
         assert (
