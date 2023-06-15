@@ -105,11 +105,10 @@ class Transcriber:
         self.data_queue.put(data)
 
     def run(self) -> str:
-        """Record a single phrase of microphone input"""
+        """Return most recent single phrase of microphone input"""
         now = datetime.utcnow()
         # Pull raw recorded audio from the queue.
         if not self.data_queue.empty():
-            pass
             # If enough time has passed between recordings, consider the phrase complete.
             # Clear the current working audio buffer to start over with the new data.
             if self.phrase_time and now - self.phrase_time > timedelta(
