@@ -34,10 +34,11 @@ class ConversationAgent(BaseConversationAgent):
 
     def greet(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
         """Start a new conversation about a topic."""
+        _inputs = inputs.copy()
         validate_inputs(inputs)
-        if "human_input" not in inputs:
-            inputs["human_input"] = GREETING
-        response = self.speak(inputs)
+        if "human_input" not in _inputs:
+            _inputs["human_input"] = GREETING
+        response = self.speak(_inputs)
         return response
 
     def speak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
@@ -48,9 +49,12 @@ class ConversationAgent(BaseConversationAgent):
         topic: the topic to discuss (optional),
         input: the current user input in the conversation
         """
-        validate_inputs(inputs)
+        _inputs = inputs.copy()
+        validate_inputs(_inputs)
         assert (
-            "human_input" in inputs
+            "human_input" in _inputs
         ), "Must provide human input for conversation chain"
-        llm_response = self.llm_chain.run(**inputs, stop=self.stop, callbacks=callbacks)
+        llm_response = self.llm_chain.run(
+            **_inputs, stop=self.stop, callbacks=callbacks
+        )
         return llm_response
