@@ -107,30 +107,29 @@ class Transcriber:
     def run(self) -> str:
         """Return most recent single phrase of microphone input"""
         now = datetime.utcnow()
-        # Pull raw recorded audio from the queue.
-        if not self.data_queue.empty():
-            # If enough time has passed between recordings, consider the phrase complete.
-            # Clear the current working audio buffer to start over with the new data.
-            if self.phrase_time and now - self.phrase_time > timedelta(
-                seconds=self.phrase_timeout
-            ):
-                self.last_sample = b""
-            # This is the last time we received new audio data from the queue.
-            self.phrase_time = now
+        # If nothing has been said recently
+        if self.data_queue.empty():
+            return ""
 
-            # Concatenate our current audio data with the latest audio data.
-            while not self.data_queue.empty():
-                data = self.data_queue.get()
-                self.last_sample += data
+        # If enough time has passed between recordings, consider the phrase complete.
+        # Clear the current audio buffer to start over with the new data.
+        if self.phrase_time and now - self.phrase_time > timedelta(
+            seconds=self.phrase_timeout
+        ):
+            self.last_sample = b""
+        # This is the last time we received new audio data from the queue.
+        self.phrase_time = now
 
-            # Use AudioData to convert the raw data to wav data.
-            audio_data = sr.AudioData(
-                self.last_sample, self.source.SAMPLE_RATE, self.source.SAMPLE_WIDTH
-            )
-            wav_data = io.BytesIO(audio_data.get_wav_data())
-            text = get_transcription(self.temp_file, wav_data)
+        # Concatenate current audio data with the latest audio data.
+        while not self.data_queue.empty():
+            self.last_sample += self.data_queue.get()
 
-            # If we detected a pause between recordings, add a new item to our transcription.
-            # Otherwise edit the existing one.
-            return text
-        return ""
+        # Use AudioData to convert the raw data to wav data.
+        audio_data = sr.AudioData(
+            self.last_sample, self.source.SAMPLE_RATE, self.source.SAMPLE_WIDTH
+        )
+        wav_data = io.BytesIO(audio_data.get_wav_data())
+
+        # Return audio transcription from OpenAI Whisper
+        text = get_transcription(self.temp_file, wav_data)
+        return text
