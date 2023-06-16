@@ -18,7 +18,6 @@ invalid_openai_api_key = os.getenv("OPENAI_API_KEY") in [None, "", "api_key"]
     reason="Needs microphones and valid OpenAI API key",
 )
 def test_transcriber_initialization(monkeypatch: MonkeyPatch) -> None:
-    print(not sr.Microphone.list_microphone_names())
     monkeypatch.setattr("builtins.input", lambda _: 1)
     Transcriber()
 
@@ -52,7 +51,23 @@ def test_transcriber_run_empty(monkeypatch: MonkeyPatch) -> None:
     assert transcription == ""
 
 
+@pytest.mark.skipif(
+    not microphones or invalid_openai_api_key,
+    reason="Needs microphones and valid OpenAI API key",
+)
+def test_transcriber_run_nonempty(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr("builtins.input", lambda _: 1)
+    transcriber = Transcriber()
+    test_wav_audio = b"\x00\x00\x00\x00"
+    transcriber.data_queue.put(test_wav_audio)
+    with pytest.raises(
+        openai.error.InvalidRequestError,
+        match="Audio file is too short. Minimum audio length is 0.1 seconds.",
+    ):
+        transcriber.run()
+
+
 @pytest.mark.skipif(invalid_openai_api_key, reason="Needs valid OpenAI API key")
-def test_get_microphone_invalid_name(monkeypatch: MonkeyPatch) -> None:
+def test_get_microphone_invalid_name() -> None:
     with pytest.raises(KeyError):
         Transcriber(default_microphone="invalid")
