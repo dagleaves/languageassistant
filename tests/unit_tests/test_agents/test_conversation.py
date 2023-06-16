@@ -4,7 +4,7 @@ import pytest
 from langchain.chat_models import ChatOpenAI
 
 from languageassistant.agents.conversation import load_conversation_agent
-from languageassistant.agents.conversation.base import validate_inputs
+from languageassistant.agents.conversation.agent import validate_inputs
 from languageassistant.utils import load_openai_api_key
 
 invalid_openai_api_key = os.getenv("OPENAI_API_KEY") in [None, "", "api_key"]

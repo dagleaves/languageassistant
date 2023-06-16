@@ -7,11 +7,15 @@ from langchain.base_language import BaseLanguageModel
 from langchain.chat_models import ChatOpenAI
 from pydantic import BaseModel
 
-from languageassistant.agents.conversation import load_conversation_agent
-from languageassistant.agents.conversation.base import BaseConversationAgent
-from languageassistant.agents.planner import load_lesson_planner
-from languageassistant.agents.planner.base import BasePlanner
-from languageassistant.agents.planner.schema import Lesson
+from languageassistant.agents.conversation import (
+    BaseConversationAgent,
+    load_conversation_agent,
+)
+from languageassistant.agents.planner import (
+    BasePlannerAgent,
+    Lesson,
+    load_lesson_planner,
+)
 from languageassistant.transcriber import Transcriber
 from languageassistant.tts import TTS
 
@@ -24,7 +28,7 @@ class Assistant(BaseModel):
     lesson: Lesson = Lesson(topics=[])
 
     llm: BaseLanguageModel = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
-    lesson_agent: BasePlanner = load_lesson_planner(llm)
+    lesson_agent: BasePlannerAgent = load_lesson_planner(llm)
     conversation_agent: BaseConversationAgent = load_conversation_agent(llm)
     transcriber: Transcriber
     tts: TTS

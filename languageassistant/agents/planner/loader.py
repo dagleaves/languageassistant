@@ -1,12 +1,10 @@
-import re
-
 from langchain.base_language import BaseLanguageModel
 from langchain.chains import LLMChain
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.schema import SystemMessage
 
-from languageassistant.agents.planner.base import LessonPlanner
-from languageassistant.agents.planner.schema import Lesson, LessonOutputParser
+from languageassistant.agents.planner.agent import LessonPlannerAgent
+from languageassistant.agents.planner.schema import LessonOutputParser
 
 SYSTEM_PROMPT = (
     "Please output the requested list of broad lesson topics starting with the header 'Topics:' "
@@ -25,15 +23,9 @@ HUMAN_TEMPLATE = (
 )
 
 
-class LessonPlanningOutputParser(LessonOutputParser):
-    def parse(self, text: str) -> Lesson:
-        topics = [v.strip() for v in re.split(r"\n\d+\. ", text)[1:]]
-        return Lesson(topics=topics)
-
-
 def load_lesson_planner(
     llm: BaseLanguageModel, system_prompt: str = SYSTEM_PROMPT, verbose: bool = False
-) -> LessonPlanner:
+) -> LessonPlannerAgent:
     prompt_template = ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=system_prompt),
@@ -41,8 +33,8 @@ def load_lesson_planner(
         ]
     )
     llm_chain = LLMChain(llm=llm, prompt=prompt_template, verbose=verbose)
-    return LessonPlanner(
+    return LessonPlannerAgent(
         llm_chain=llm_chain,
-        output_parser=LessonPlanningOutputParser(),
+        output_parser=LessonOutputParser(),
         stop=["<END_OF_LIST>"],
     )

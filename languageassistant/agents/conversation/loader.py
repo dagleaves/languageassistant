@@ -3,7 +3,7 @@ from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts.prompt import PromptTemplate
 
-from languageassistant.agents.conversation import ConversationAgent
+from languageassistant.agents.conversation.agent import ConversationAgent
 
 PROMPT_TEMPLATE = (
     "Assistant is a native {language} language teacher."
