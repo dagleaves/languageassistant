@@ -16,6 +16,6 @@ class LessonPlannerAgent(BasePlannerAgent):
     stop: Optional[List] = None
 
     def plan(self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any) -> Lesson:
-        """Given input, decided what to do."""
+        """Get a lesson plan of topics tailored to user background"""
         llm_response = self.llm_chain.run(**inputs, stop=self.stop, callbacks=callbacks)
         return self.output_parser.parse(llm_response)

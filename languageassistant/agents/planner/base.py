@@ -1,4 +1,4 @@
-"""Base abstract planner classes"""
+"""Planner agent abstract base classes"""
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -13,4 +13,4 @@ class BasePlannerAgent(BaseModel, ABC):
 
     @abstractmethod
     def plan(self, inputs: dict, callbacks: Callbacks = None, **kwargs: Any) -> Lesson:
-        """Given input, decided what to do."""
+        """Get a lesson plan of topics tailored to user background"""

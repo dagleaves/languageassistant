@@ -1,3 +1,6 @@
+"""Conversation agent LLM chain loader"""
+from typing import Optional
+
 from langchain.base_language import BaseLanguageModel
 from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
@@ -23,9 +26,28 @@ PROMPT_TEMPLATE = (
 
 def load_conversation_agent(
     llm: BaseLanguageModel,
-    prompt_template: str = PROMPT_TEMPLATE,
+    prompt_template: Optional[str] = None,
     verbose: bool = False,
 ) -> ConversationAgent:
+    """
+    Return a conversation agent initialized with memory and custom prompts
+
+    Parameters
+    ----------
+    llm
+        Which LLM to use for inference
+    prompt_template
+        Prompt template instructing LLM role and response instructions
+    verbose
+        If the LLM chain should be verbose
+
+    Returns
+    -------
+    ConversationAgent
+        ConversationAgent instance
+    """
+    if prompt_template is None:
+        prompt_template = PROMPT_TEMPLATE
     prompt = PromptTemplate(
         input_variables=["language", "topic", "proficiency", "history", "human_input"],
         template=prompt_template,

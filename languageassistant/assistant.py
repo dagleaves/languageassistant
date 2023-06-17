@@ -24,21 +24,31 @@ class Assistant(BaseModel):
     """Full language assistant model"""
 
     language: str
+    """Target language"""
     proficiency: str
+    """User proficiency with target language"""
     lesson: Lesson = Lesson(topics=[])
+    """Lesson plan of topics to discuss"""
 
     llm: BaseLanguageModel = ChatOpenAI(temperature=0)  # type: ignore[call-arg]
+    """Language model for inference"""
     lesson_agent: BasePlannerAgent = load_lesson_planner(llm)
+    """Agent to use for planning lessons"""
     conversation_agent: BaseConversationAgent = load_conversation_agent(llm)
+    """Agent to use for conversing about a topic"""
     transcriber: Transcriber
+    """Voice transcription model"""
     tts: TTS
+    """Text-to-speech model"""
     use_tts: bool = True
+    """If TTS should be used or not"""
 
     class Config:
         arbitrary_types_allowed = True
 
     @property
     def background(self) -> Dict[str, str]:
+        """User target language background"""
         return {"language": self.language, "proficiency": self.proficiency}
 
     def plan_lesson(self) -> None:
@@ -52,7 +62,7 @@ class Assistant(BaseModel):
         return self.conversation_agent.greet(inputs)
 
     def speak(self, topic: str, human_input: str) -> str:
-        """Single response from user's conversation input"""
+        """Single response from user's conversation input about a topic"""
         inputs = self.background.copy()
         inputs["topic"] = topic
         inputs["human_input"] = human_input
@@ -93,10 +103,15 @@ class Assistant(BaseModel):
     def run(
         self, include_topic_background: bool, lesson: Optional[List[str]] = None
     ) -> None:
-        """Full assistant discussion loop
-        @param include_topic_background: if assistant should explain topic before conversing
-        @param lesson: custom list of topics for lesson
-        @return None
+        """
+        Full assistant lesson planning, background teaching, and conversation loop
+
+        Parameters
+        ----------
+        include_topic_background
+            If the user wants background teaching before starting the conversation
+        lesson
+            An optional custom lesson plan of topics to discuss
         """
         # Get lesson plan if not provided
         if lesson is None:

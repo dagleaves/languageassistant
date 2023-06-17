@@ -1,3 +1,4 @@
+"""Project-wide utils"""
 import os
 
 import openai

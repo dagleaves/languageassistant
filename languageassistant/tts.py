@@ -24,7 +24,7 @@ class BaseTTS(BaseModel, ABC):
 
 
 class TTS(BaseTTS):
-    """Multilingual TTS using the Google TTS API"""
+    """Multilingual text-to-speech using the Google TTS API"""
 
     client: Optional[texttospeech.TextToSpeechClient] = None
     """Google TTS client"""
