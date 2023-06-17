@@ -1,4 +1,7 @@
-"""Modified version of https://github.com/jakvb/whisper_real_time"""
+"""
+Real-time voice transcription using OpenAI Whisper
+Modified from https://github.com/jakvb/whisper_real_time
+"""
 import io
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
@@ -17,6 +20,21 @@ class MicrophoneNotFoundError(Exception):
 
 
 def get_transcription(temp_file: str, wav_data: io.BytesIO) -> str:
+    """
+    Retrieve OpenAI Whisper transcription from audio
+
+    Parameters
+    ----------
+    temp_file
+        Name of temporary file to store audio data
+    wav_data
+        MP3 audio in io.BytesIO
+
+    Returns
+    -------
+    str
+        Audio transcription
+    """
     # Write wav data to the temporary file as bytes.
     with open(temp_file, "w+b") as wf:
         wf.write(wav_data.read())
@@ -97,15 +115,19 @@ class Transcriber:
 
     def _record_callback(self, _: Any, audio: sr.AudioData) -> None:
         """
-        Threaded callback function to recieve audio data when recordings finish.
-        audio: An AudioData containing the recorded bytes.
+        Threaded callback function to receive audio data when recordings finish
+
+        Parameters
+        ----------
+        audio
+            An AudioData containing the recorded bytes
         """
         # Grab the raw bytes and push it into the thread safe queue.
         data = audio.get_raw_data()
         self.data_queue.put(data)
 
     def run(self) -> str:
-        """Return most recent single phrase of microphone input"""
+        """Return the most recent single phrase of microphone input"""
         now = datetime.utcnow()
         # If nothing has been said recently
         if self.data_queue.empty():

@@ -1,3 +1,4 @@
+"""Planner agent LLM chain loader"""
 from langchain.base_language import BaseLanguageModel
 from langchain.chains import LLMChain
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
@@ -24,12 +25,34 @@ HUMAN_TEMPLATE = (
 
 
 def load_lesson_planner(
-    llm: BaseLanguageModel, system_prompt: str = SYSTEM_PROMPT, verbose: bool = False
+    llm: BaseLanguageModel,
+    system_prompt: str = SYSTEM_PROMPT,
+    human_prompt: str = HUMAN_TEMPLATE,
+    verbose: bool = False,
 ) -> LessonPlannerAgent:
+    """
+    Return a lesson planner agent initialized with memory and custom prompts
+
+    Parameters
+    ----------
+    llm
+        Which LLM to use for inference
+    system_prompt
+        Prompt template instructing LLM role and response format
+    human_prompt
+        Prompt template providing LLM user proficiency and target language
+    verbose
+        If the LLM chain should be verbose
+
+    Returns
+    -------
+    LessonPlannerAgent
+        LessonPlannerAgent instance
+    """
     prompt_template = ChatPromptTemplate.from_messages(
         [
             SystemMessage(content=system_prompt),
-            HumanMessagePromptTemplate.from_template(HUMAN_TEMPLATE),
+            HumanMessagePromptTemplate.from_template(human_prompt),
         ]
     )
     llm_chain = LLMChain(llm=llm, prompt=prompt_template, verbose=verbose)

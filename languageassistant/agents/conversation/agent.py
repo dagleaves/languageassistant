@@ -1,3 +1,4 @@
+"""Conversation agent implementation"""
 from typing import Dict, List, Optional
 
 from langchain.callbacks.manager import Callbacks
@@ -11,6 +12,18 @@ GREETING = (
 
 
 def validate_inputs(inputs: Dict[str, str]) -> None:
+    """
+    Ensure conversation agent input dicts contain correct keys
+
+    Parameters
+    ----------
+    inputs
+        Dictionary containing conversation inputs. Expects:
+
+            - language
+            - proficiency
+            - topic
+    """
     assert "language" in inputs, "Must provide target language for conversation agent"
     assert (
         "proficiency" in inputs
@@ -19,8 +32,12 @@ def validate_inputs(inputs: Dict[str, str]) -> None:
 
 
 class ConversationAgent(BaseConversationAgent):
+    """LLM agent for conversing about a topic in the target language"""
+
     llm_chain: LLMChain
+    """Any LLM chain for inference"""
     stop: Optional[List] = None
+    """LLM end-of-response keyword"""
 
     def greet(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
         """Start a new conversation about a topic."""
@@ -32,12 +49,25 @@ class ConversationAgent(BaseConversationAgent):
         return response
 
     def speak(self, inputs: Dict[str, str], callbacks: Callbacks = None) -> str:
-        """Given input, create reply.
-        inputs: dict {
-        langauge: target language (optional),
-        proficiency: user proficiency with target language (optional)
-        topic: the topic to discuss (optional),
-        input: the current user input in the conversation
+        """
+        Get single response to user input
+
+        Parameters
+        ----------
+        inputs
+            Conversation inputs dictionary. Expects:
+
+                - language: target language (optional)
+                - proficiency: user proficiency with target language (optional)
+                - topic: the topic to discuss (optional)
+                - input: the current user input in the conversation
+        callbacks
+            LangChain LLM callbacks
+
+        Returns
+        -------
+        str
+            Single LLM response
         """
         _inputs = inputs.copy()
         validate_inputs(_inputs)
