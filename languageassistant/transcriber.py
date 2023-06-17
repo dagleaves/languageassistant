@@ -49,6 +49,10 @@ class BaseTranscriber(ABC):
     """Abstract base transcription class"""
 
     @abstractmethod
+    def clear_recording_buffer(self) -> None:
+        """Clear the recording buffer"""
+
+    @abstractmethod
     def run(self) -> str:
         """Record a single phrase of microphone input"""
 
@@ -125,6 +129,10 @@ class Transcriber:
         # Grab the raw bytes and push it into the thread safe queue.
         data = audio.get_raw_data()
         self.data_queue.put(data)
+
+    def clear_recording_buffer(self) -> None:
+        """Clear the recording buffer"""
+        self.data_queue.queue.clear()
 
     def run(self) -> str:
         """Return the most recent single phrase of microphone input"""

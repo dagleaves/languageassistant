@@ -68,27 +68,52 @@ class Assistant(BaseModel):
         inputs["human_input"] = human_input
         return self.conversation_agent.speak(inputs)
 
+    def _converse(self, topic: str) -> None:
+        """Private converse method to reduce indentation in actual converse method"""
+        # Have Assistant start the conversation
+        ai_response = self.speak(topic, "What should I know first?")
+        print("\rAssistant:", ai_response)
+        if self.use_tts:
+            self.tts.run(ai_response)
+
+        # Clear transcription recording buffer before conversation
+        self.transcriber.clear_recording_buffer()
+
+        # Begin conversation loop
+        while True:
+            # Get user input
+            print("Microphone recording...", end="")
+            user_input = self.transcriber.run()
+
+            # User did not say anything
+            if user_input == "":
+                print("\r", end="")
+                time.sleep(0.25)
+                continue
+
+            # Overwrite microphone recording message
+            r_padding = " " * max(23 - 7 - len(user_input), 0)
+            print("\rHuman:", user_input, r_padding)
+
+            # Retrieve Assistant response
+            print("Retrieving response...", end="")
+            ai_response = self.speak(topic, user_input)
+
+            # Assistant detects user wishes to end the conversation
+            if "<END_CONVERSATION>" in ai_response:
+                return
+
+            # Output Assistant response
+            print("\rAssistant:", ai_response)
+            if self.use_tts:
+                self.tts.run(ai_response)
+
+            self.transcriber.clear_recording_buffer()
+
     def converse(self, topic: str) -> None:
         """Converse with conversation agent about a topic"""
         try:
-            while True:
-                print("Microphone recording...", end="")
-                user_input = self.transcriber.run()
-                if user_input == "":
-                    print("\r", end="")
-                    time.sleep(0.25)
-                    continue
-                r_padding = " " * max(
-                    23 - 7 - len(user_input), 0
-                )  # fully cover "Microphone recording..."
-                print("\rHuman:", user_input, r_padding)
-                print("Retrieving response...", end="")
-                ai_response = self.speak(topic, user_input)
-                if "<END_CONVERSATION>" in ai_response:
-                    return
-                print("\rAssistant:", ai_response)
-                if self.use_tts:
-                    self.tts.run(ai_response)
+            self._converse(topic)
         except KeyboardInterrupt:
             return
 
@@ -130,6 +155,11 @@ class Assistant(BaseModel):
         for topic in self.lesson.topics:
             print("Starting new conversation. Press CTRL + C to end conversation")
             print("Topic:", topic)
+
+            # Clear transcription recording buffer before conversation
+            self.transcriber.clear_recording_buffer()
+
+            # Begin conversation
             if include_topic_background:
                 self._output_topic_background(topic)
             self.converse(topic)
