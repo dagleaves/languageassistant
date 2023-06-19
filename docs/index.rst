@@ -17,13 +17,26 @@ LanguageAssistant can help through its real-time transcription (powered by
 `OpenAI's Whisper <https://openai.com/research/whisper>`_) and multi-lingual text-to-speech (powered by
 `Google TTS <https://cloud.google.com/text-to-speech>`_).
 
+This project is largely a proof of concept, but has been setup to be extensible so that it could be used as a
+backend for a full-fledged application utilizing a better UI, microphone recording, transcription, LLM prompts,
+and/or multi-lingual text-to-speech.
+
+Features of LanguageAssistant:
+
+   - Full real-time vocal multilingual conversations
+   - Real-time voice transcription
+   - LLM text responses
+   - Multilingual text-to-speech
+   - LLM agent for lesson planning
+
 
 .. toctree::
    :maxdepth: 1
    :caption: Getting Started
    :hidden:
 
-   User Guide <getting_started>
+   User Guide <getting_started/user_guide>
+   Contributing Guide <getting_started/contributing>
 
 .. toctree::
    :caption: API Reference
