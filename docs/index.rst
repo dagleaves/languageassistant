@@ -37,6 +37,7 @@ Features of LanguageAssistant:
 
    User Guide <getting_started/user_guide>
    Contributing Guide <getting_started/contributing>
+   Full Example <getting_started/full_conversation_example>
 
 .. toctree::
    :caption: API Reference
@@ -45,7 +46,7 @@ Features of LanguageAssistant:
    API Reference <reference>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Extras
    :hidden:
 
