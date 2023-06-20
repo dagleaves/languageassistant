@@ -41,7 +41,6 @@ jobs:
           message: "Release ${{ steps.updated_version.outputs.version }}"
           push: false
           tag: "${{ steps.updated_version.outputs.version }}"
-      - name: Create tag
 
       - name: Push to protected branch
         uses: CasperWA/push-protected@v2
