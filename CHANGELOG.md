@@ -16,3 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Contributing guide documentation (#66)
 - API reference documentation (#50)
 - Getting started guide (#48)
+
+### Fixed
+
+- GitHub workflow set-output deprecation (#70)
