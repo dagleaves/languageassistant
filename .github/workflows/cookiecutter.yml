@@ -23,7 +23,7 @@ jobs:
 
       - name: Check if there are changes
         id: changes
-        run: echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+        run: echo "changed=$(git status --porcelain | wc -l)" >> "$GITHUB_OUTPUT"
 
       - name: apply additional changes and fixes
         if: steps.changes.outputs.changed > 0
@@ -39,8 +39,8 @@ jobs:
         run: |
           CURRENT_VERSION=$(git show HEAD:.cruft.json | jello -r "_['commit'][:8]")
           NEXT_VERSION=$(jello -r "_['commit'][:8]" < .cruft.json)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "next_version=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Get changelog
         id: get_changelog
@@ -60,7 +60,7 @@ jobs:
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
-          echo "changelog=$body" >> $GITHUB_OUTPUT
+          echo "changelog=$body" >> "$GITHUB_OUTPUT"
 
       # behaviour if PR already exists: https://github.com/marketplace/actions/create-pull-request#action-behaviour
       - name: Create Pull Request
