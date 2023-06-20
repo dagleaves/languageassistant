@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "languageassistant"
-version = "0.0.1"
+version = "0.1.0"
 description = "An LLM-powered language learning assistant"
 authors = [
     "Daniel Gleaves <daniel@dagleaves.com>",
