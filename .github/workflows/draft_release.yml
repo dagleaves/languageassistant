@@ -21,6 +21,7 @@ jobs:
           poetry version ${{ github.event.inputs.version }}
           version=$(poetry version --short)
           echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Update changelog
         id: changelog
         shell: bash
@@ -32,14 +33,14 @@ jobs:
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
           echo "body=$body" >> "$GITHUB_OUTPUT"
+
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
         with:
-          add: 'CHANGELOG.md pyproject.toml'
-          message: 'Release ${{ steps.updated_version.outputs.version }}'
-      - name: Create tag
-        run: |
-          git tag ${{ steps.updated_version.outputs.version }}
+          add: "CHANGELOG.md pyproject.toml"
+          message: "Release ${{ steps.updated_version.outputs.version }}"
+          push: false
+          tag: "${{ steps.updated_version.outputs.version }}"
 
       - name: Push to protected branch
         uses: CasperWA/push-protected@v2
