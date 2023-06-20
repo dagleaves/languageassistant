@@ -2,6 +2,9 @@
 
 To run this example, see [examples/main.py](https://github.com/dagleaves/languageassistant/blob/main/examples/main.py)
 
+Before starting, be sure you are exporting the necessary environment variables for your API keys. See the
+[User Guide](user_guide.md) for more information.
+
 ```python
 # Imports
 from languageassistant.assistant import Assistant
