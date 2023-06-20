@@ -40,7 +40,14 @@ jobs:
       - name: Create tag
         run: |
           git tag ${{ steps.updated_version.outputs.version }}
-          git push origin ${{ steps.updated_version.outputs.version }}
+
+      - name: Push to protected branch
+        uses: CasperWA/push-protected@v2
+        with:
+          token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
+          branch: main
+          unprotect_reviews: true
+
       - name: Create a draft release
         uses: actions/create-release@v1
         env:
