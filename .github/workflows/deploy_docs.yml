@@ -16,9 +16,9 @@ jobs:
           poetry run sphinx-build docs _build
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           publish_branch: gh-pages
-          github_token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
+          personal_token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
           publish_dir: _build/
           force_orphan: true
