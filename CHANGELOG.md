@@ -20,5 +20,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - GitHub workflow set-output deprecation (#70)
 
-[Unreleased]: https://github.com/dagleaves/languageassistant/compare/0.1.0...master
+[Unreleased]: https://github.com/dagleaves/languageassistant/compare/0.1.0...main
 [0.1.0]: https://github.com/dagleaves/languageassistant/tree/0.1.0
